@@ -4,21 +4,21 @@ QBCore.Commands.Add("fix", "Repair your vehicle (Admin Only)", {}, false, functi
 end, "admin")
 
 QBCore.Functions.CreateUseableItem("repairkit", function(source, item)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = ESX.GetPlayerFromId(source)
 	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
         TriggerClientEvent("qb-vehiclefailure:client:RepairVehicle", source)
     end
 end)
 
 QBCore.Functions.CreateUseableItem("cleaningkit", function(source, item)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = ESX.GetPlayerFromId(source)
 	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
         TriggerClientEvent("qb-vehiclefailure:client:CleanVehicle", source)
     end
 end)
 
 QBCore.Functions.CreateUseableItem("advancedrepairkit", function(source, item)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = ESX.GetPlayerFromId(source)
 	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
         TriggerClientEvent("qb-vehiclefailure:client:RepairVehicleFull", source)
     end
