@@ -1,11 +1,12 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-VehicleFailure'
+description 'VehicleFailure'
 version '1.2.2'
 
 shared_scripts {
-    '@qb-core/shared/locale.lua',
+    '@es_extended/imports.lua',
+    '@ox_lib/init.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua'
