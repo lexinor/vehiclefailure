@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 QBCore.Commands.Add("fix", "Repair your vehicle (Admin Only)", {}, false, function(source)
     TriggerClientEvent('iens:repaira', source)
     TriggerClientEvent('vehiclemod:client:fixEverything', source)
@@ -27,13 +26,13 @@ end)
 
 RegisterNetEvent('qb-vehiclefailure:removeItem', function(item)
     local src = source
-    local ply = QBCore.Functions.GetPlayer(src)
+    local ply = ESX.GetPlayerFromId(src)
     ply.Functions.RemoveItem(item, 1)
 end)
 
 RegisterNetEvent('qb-vehiclefailure:server:removewashingkit', function(veh)
     local src = source
-    local ply = QBCore.Functions.GetPlayer(src)
+    local ply = ESX.GetPlayerFromId(src)
     ply.Functions.RemoveItem("cleaningkit", 1)
     TriggerClientEvent('qb-vehiclefailure:client:SyncWash', -1, veh)
 end)
