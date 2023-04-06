@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local pedInSameVehicleLast=false
 local vehicle
 local lastVehicle
@@ -56,16 +55,16 @@ local function CleanVehicle(veh)
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        QBCore.Functions.Notify(Lang:t("success.cleaned_veh"))
+        ESX.ShowNotification(Lang:t("success.cleaned_veh"))
         SetVehicleDirtLevel(veh, 0.1)
         SetVehicleUndriveable(veh, false)
         WashDecalsFromVehicle(veh, 1.0)
-        TriggerServerEvent('qb-vehiclefailure:server:removewashingkit', veh)
+        TriggerServerEvent('vehiclefailure:server:removewashingkit', veh)
         TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["cleaningkit"], "remove")
         ClearAllPedProps(ped)
         ClearPedTasks(ped)
     end, function() -- Cancel
-        QBCore.Functions.Notify(Lang:t("error.failed_notification"), "error")
+        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
         ClearAllPedProps(ped)
         ClearPedTasks(ped)
     end)
@@ -93,7 +92,7 @@ local function RepairVehicleFull(veh)
         flags = 16,
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        QBCore.Functions.Notify(Lang:t("success.repaired_veh"))
+        ESX.ShowNotification(Lang:t("success.repaired_veh"))
         SetVehicleEngineHealth(veh, 1000.0)
         SetVehicleEngineOn(veh, true, false)
         SetVehicleTyreFixed(veh, 0)
@@ -106,10 +105,10 @@ local function RepairVehicleFull(veh)
         else
             SetVehicleDoorShut(veh, 4, false)
         end
-        TriggerServerEvent('qb-vehiclefailure:removeItem', "advancedrepairkit")
+        TriggerServerEvent('vehiclefailure:removeItem', "advancedrepairkit")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.failed_notification"), "error")
+        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
         if (IsBackEngine(GetEntityModel(veh))) then
             SetVehicleDoorShut(veh, 5, false)
         else
@@ -135,7 +134,7 @@ local function RepairVehicle(veh)
         flags = 16,
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        QBCore.Functions.Notify(Lang:t("success.repaired_veh"))
+        ESX.ShowNotification(Lang:t("success.repaired_veh"))
         SetVehicleEngineHealth(veh, 500.0)
         SetVehicleEngineOn(veh, true, false)
         SetVehicleTyreFixed(veh, 0)
@@ -148,10 +147,10 @@ local function RepairVehicle(veh)
         else
             SetVehicleDoorShut(veh, 4, false)
         end
-        TriggerServerEvent('qb-vehiclefailure:removeItem', "repairkit")
+        TriggerServerEvent('vehiclefailure:removeItem', "repairkit")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.failed_notification"), "error")
+        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
         if (IsBackEngine(GetEntityModel(veh))) then
             SetVehicleDoorShut(veh, 5, false)
         else
@@ -257,7 +256,7 @@ end
 
 -- Events
 
-RegisterNetEvent('qb-vehiclefailure:client:RepairVehicle', function()
+RegisterNetEvent('vehiclefailure:client:RepairVehicle', function()
     local veh = QBCore.Functions.GetClosestVehicle()
     local engineHealth = GetVehicleEngineHealth(veh) --This is to prevent people from "repairing" a vehicle and setting engine health lower than what the vehicles engine health was before repairing.
     if veh ~= nil and veh ~= 0 and engineHealth < 500 then
@@ -274,27 +273,27 @@ RegisterNetEvent('qb-vehiclefailure:client:RepairVehicle', function()
             end
         else
             if #(pos - vehpos) > 4.9 then
-                QBCore.Functions.Notify(Lang:t("error.out_range_veh"), "error")
+                ESX.ShowNotification(Lang:t("error.out_range_veh"), "error")
             else
-                QBCore.Functions.Notify(Lang:t("error.inside_veh"), "error")
+                ESX.ShowNotification(Lang:t("error.inside_veh"), "error")
             end
         end
     else
         if veh == nil or veh == 0 then
-            QBCore.Functions.Notify(Lang:t("error.not_near_veh"), "error")
+            ESX.ShowNotification(Lang:t("error.not_near_veh"), "error")
         else
-            QBCore.Functions.Notify(Lang:t("error.healthy_veh"), "error")
+            ESX.ShowNotification(Lang:t("error.healthy_veh"), "error")
         end
     end
 end)
 
-RegisterNetEvent('qb-vehiclefailure:client:SyncWash', function(veh)
+RegisterNetEvent('vehiclefailure:client:SyncWash', function(veh)
     SetVehicleDirtLevel(veh, 0.1)
     SetVehicleUndriveable(veh, false)
     WashDecalsFromVehicle(veh, 1.0)
 end)
 
-RegisterNetEvent('qb-vehiclefailure:client:CleanVehicle', function()
+RegisterNetEvent('vehiclefailure:client:CleanVehicle', function()
     local veh = QBCore.Functions.GetClosestVehicle()
     if veh ~= nil and veh ~= 0 then
         local ped = PlayerPedId()
@@ -306,7 +305,7 @@ RegisterNetEvent('qb-vehiclefailure:client:CleanVehicle', function()
     end
 end)
 
-RegisterNetEvent('qb-vehiclefailure:client:RepairVehicleFull', function()
+RegisterNetEvent('vehiclefailure:client:RepairVehicleFull', function()
     local veh = QBCore.Functions.GetClosestVehicle()
     if veh ~= nil and veh ~= 0 then
         local ped = PlayerPedId()
@@ -322,13 +321,13 @@ RegisterNetEvent('qb-vehiclefailure:client:RepairVehicleFull', function()
             end
         else
             if #(pos - vehpos) > 4.9 then
-                QBCore.Functions.Notify(Lang:t("error.out_range_veh"), "error")
+                ESX.ShowNotification(Lang:t("error.out_range_veh"), "error")
             else
-                QBCore.Functions.Notify(Lang:t("error.inside_veh"), "error")
+                ESX.ShowNotification(Lang:t("error.inside_veh"), "error")
             end
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.not_near_veh"), "error")
+        ESX.ShowNotification(Lang:t("error.not_near_veh"), "error")
     end
 end)
 
@@ -339,7 +338,7 @@ RegisterNetEvent('iens:repaira', function()
         SetVehicleDirtLevel(vehicle)
         SetVehicleUndriveable(vehicle, false)
         WashDecalsFromVehicle(vehicle, 1.0)
-        QBCore.Functions.Notify(Lang:t("success.repaired_veh"))
+        ESX.ShowNotification(Lang:t("success.repaired_veh"))
         SetVehicleFixed(vehicle)
         healthBodyLast = 1000.0
         healthEngineLast = 1000.0
@@ -347,15 +346,15 @@ RegisterNetEvent('iens:repaira', function()
         SetVehicleEngineOn(vehicle, true, false )
         return true
     end
-    QBCore.Functions.Notify(Lang:t("error.inside_veh_req"))
+    ESX.ShowNotification(Lang:t("error.inside_veh_req"))
 end)
 
 RegisterNetEvent('iens:besked', function()
-    QBCore.Functions.Notify(Lang:t("error.roadside_avail"))
+    ESX.ShowNotification(Lang:t("error.roadside_avail"))
 end)
 
 RegisterNetEvent('iens:notAllowed', function()
-    QBCore.Functions.Notify(Lang:t("error.no_permission"))
+    ESX.ShowNotification(Lang:t("error.no_permission"))
 end)
 
 RegisterNetEvent('iens:repair', function()
@@ -374,19 +373,19 @@ RegisterNetEvent('iens:repair', function()
                 healthPetrolTankLast=750.0
                 SetVehicleEngineOn(vehicle, true, false )
                 SetVehicleOilLevel(vehicle,(GetVehicleOilLevel(vehicle)/3)-0.5)
-                QBCore.Functions.Notify(Lang:t(('fix_message_%s'):format(fixMessagePos)))
+                ESX.ShowNotification(Lang:t(('fix_message_%s'):format(fixMessagePos)))
                 fixMessagePos = fixMessagePos + 1
                 if fixMessagePos > repairCfg.fixMessageCount then fixMessagePos = 1 end
             else
-                QBCore.Functions.Notify(Lang:t("error.veh_damaged"))
+                ESX.ShowNotification(Lang:t("error.veh_damaged"))
             end
         else
-            QBCore.Functions.Notify(Lang:t(('nofix_message_%s'):format(noFixMessagePos)))
+            ESX.ShowNotification(Lang:t(('nofix_message_%s'):format(noFixMessagePos)))
             noFixMessagePos = noFixMessagePos + 1
             if noFixMessagePos > repairCfg.noFixMessageCount then noFixMessagePos = 1 end
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.inside_veh_req"))
+        ESX.ShowNotification(Lang:t("error.inside_veh_req"))
     end
 end)
 
