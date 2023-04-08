@@ -59,11 +59,6 @@ local function CleanVehicle(veh)
             car = true,
             combat = true,
         },
-        anim = {
-            dict = 'mini@repair',
-            clip = 'fixing_a_player',
-            flag = 16,
-        },
     }) then
         ESX.ShowNotification(locale("success.cleaned_veh"))
         SetVehicleDirtLevel(veh, 0.1)
