@@ -1,3 +1,4 @@
+lib.locale()
 local pedInSameVehicleLast=false
 local vehicle
 local lastVehicle
@@ -47,27 +48,36 @@ local function DamageRandomComponent()
 end
 
 local function CleanVehicle(veh)
-    local ped = PlayerPedId()
-    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_MAID_CLEAN", 0, true)
-    QBCore.Functions.Progressbar("cleaning_vehicle", Lang:t("progress.clean_veh"), math.random(10000, 20000), false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        ESX.ShowNotification(Lang:t("success.cleaned_veh"))
+    TaskStartScenarioInPlace(cache.ped, "WORLD_HUMAN_MAID_CLEAN", 0, true)
+    if lib.progressBar({
+        duration = math.random(10000, 20000),
+        label = locale("progress.clean_veh"),
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            move = true,
+            car = true,
+            combat = true,
+        },
+        anim = {
+            dict = 'mini@repair',
+            clip = 'fixing_a_player',
+            flag = 16,
+        },
+    }) then
+        ESX.ShowNotification(locale("success.cleaned_veh"))
         SetVehicleDirtLevel(veh, 0.1)
         SetVehicleUndriveable(veh, false)
         WashDecalsFromVehicle(veh, 1.0)
         TriggerServerEvent('vehiclefailure:server:removewashingkit', veh)
         TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["cleaningkit"], "remove")
-        ClearAllPedProps(ped)
-        ClearPedTasks(ped)
-    end, function() -- Cancel
-        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
-        ClearAllPedProps(ped)
-        ClearPedTasks(ped)
-    end)
+        ClearAllPedProps(cache.ped)
+        ClearPedTasks(cache.ped)
+    else 
+        ESX.ShowNotification(locale("error.failed_notification"), "error")
+        ClearAllPedProps(cache.ped)
+        ClearPedTasks(cache.ped)
+    end
 end
 
 local function IsBackEngine(vehModel)
@@ -81,18 +91,24 @@ local function RepairVehicleFull(veh)
         SetVehicleDoorOpen(veh, 4, false, false)
     end
 
-    QBCore.Functions.Progressbar("repair_vehicle", Lang:t("progress.repair_veh"), math.random(20000, 30000), false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {
-        animDict = "mini@repair",
-        anim = "fixing_a_player",
-        flags = 16,
-    }, {}, {}, function() -- Done
-        StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        ESX.ShowNotification(Lang:t("success.repaired_veh"))
+    if lib.progressBar({
+        duration = math.random(20000, 30000),
+        label = locale("progress.repair_veh"),
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            move = true,
+            car = true,
+            combat = true,
+        },
+        anim = {
+            dict = 'mini@repair',
+            clip = 'fixing_a_player',
+            flag = 16,
+        },
+    }) then
+        StopAnimTask(cache.ped, "mini@repair", "fixing_a_player", 1.0)
+        ESX.ShowNotification(locale("success.repaired_veh"))
         SetVehicleEngineHealth(veh, 1000.0)
         SetVehicleEngineOn(veh, true, false)
         SetVehicleTyreFixed(veh, 0)
@@ -106,15 +122,15 @@ local function RepairVehicleFull(veh)
             SetVehicleDoorShut(veh, 4, false)
         end
         TriggerServerEvent('vehiclefailure:removeItem', "advancedrepairkit")
-    end, function() -- Cancel
+    else 
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
+        ESX.ShowNotification(locale("error.failed_notification"), "error")
         if (IsBackEngine(GetEntityModel(veh))) then
             SetVehicleDoorShut(veh, 5, false)
         else
             SetVehicleDoorShut(veh, 4, false)
         end
-    end)
+    end
 end
 
 local function RepairVehicle(veh)
@@ -123,18 +139,24 @@ local function RepairVehicle(veh)
     else
         SetVehicleDoorOpen(veh, 4, false, false)
     end
-    QBCore.Functions.Progressbar("repair_vehicle", Lang:t("progress.repair_veh"), math.random(10000, 20000), false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {
-        animDict = "mini@repair",
-        anim = "fixing_a_player",
-        flags = 16,
-    }, {}, {}, function() -- Done
+    if lib.progressBar({
+        duration = math.random(10000, 20000),
+        label = locale("progress.repair_veh"),
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            move = true,
+            car = true,
+            combat = true,
+        },
+        anim = {
+            dict = 'mini@repair',
+            clip = 'fixing_a_player',
+            flag = 16,
+        },
+    }) then
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        ESX.ShowNotification(Lang:t("success.repaired_veh"))
+        ESX.ShowNotification(locale("success.repaired_veh"))
         SetVehicleEngineHealth(veh, 500.0)
         SetVehicleEngineOn(veh, true, false)
         SetVehicleTyreFixed(veh, 0)
@@ -148,15 +170,15 @@ local function RepairVehicle(veh)
             SetVehicleDoorShut(veh, 4, false)
         end
         TriggerServerEvent('vehiclefailure:removeItem', "repairkit")
-    end, function() -- Cancel
+    else 
         StopAnimTask(PlayerPedId(), "mini@repair", "fixing_a_player", 1.0)
-        ESX.ShowNotification(Lang:t("error.failed_notification"), "error")
+        ESX.ShowNotification(locale("error.failed_notification"), "error")
         if (IsBackEngine(GetEntityModel(veh))) then
             SetVehicleDoorShut(veh, 5, false)
         else
             SetVehicleDoorShut(veh, 4, false)
         end
-    end)
+    end
 end
 
 local function isPedDrivingAVehicle()
@@ -273,16 +295,16 @@ RegisterNetEvent('vehiclefailure:client:RepairVehicle', function()
             end
         else
             if #(pos - vehpos) > 4.9 then
-                ESX.ShowNotification(Lang:t("error.out_range_veh"), "error")
+                ESX.ShowNotification(locale("error.out_range_veh"), "error")
             else
-                ESX.ShowNotification(Lang:t("error.inside_veh"), "error")
+                ESX.ShowNotification(locale("error.inside_veh"), "error")
             end
         end
     else
         if veh == nil or veh == 0 then
-            ESX.ShowNotification(Lang:t("error.not_near_veh"), "error")
+            ESX.ShowNotification(locale("error.not_near_veh"), "error")
         else
-            ESX.ShowNotification(Lang:t("error.healthy_veh"), "error")
+            ESX.ShowNotification(locale("error.healthy_veh"), "error")
         end
     end
 end)
@@ -321,13 +343,13 @@ RegisterNetEvent('vehiclefailure:client:RepairVehicleFull', function()
             end
         else
             if #(pos - vehpos) > 4.9 then
-                ESX.ShowNotification(Lang:t("error.out_range_veh"), "error")
+                ESX.ShowNotification(locale("error.out_range_veh"), "error")
             else
-                ESX.ShowNotification(Lang:t("error.inside_veh"), "error")
+                ESX.ShowNotification(locale("error.inside_veh"), "error")
             end
         end
     else
-        ESX.ShowNotification(Lang:t("error.not_near_veh"), "error")
+        ESX.ShowNotification(locale("error.not_near_veh"), "error")
     end
 end)
 
@@ -338,7 +360,7 @@ RegisterNetEvent('iens:repaira', function()
         SetVehicleDirtLevel(vehicle)
         SetVehicleUndriveable(vehicle, false)
         WashDecalsFromVehicle(vehicle, 1.0)
-        ESX.ShowNotification(Lang:t("success.repaired_veh"))
+        ESX.ShowNotification(locale("success.repaired_veh"))
         SetVehicleFixed(vehicle)
         healthBodyLast = 1000.0
         healthEngineLast = 1000.0
@@ -346,15 +368,15 @@ RegisterNetEvent('iens:repaira', function()
         SetVehicleEngineOn(vehicle, true, false )
         return true
     end
-    ESX.ShowNotification(Lang:t("error.inside_veh_req"))
+    ESX.ShowNotification(locale("error.inside_veh_req"))
 end)
 
 RegisterNetEvent('iens:besked', function()
-    ESX.ShowNotification(Lang:t("error.roadside_avail"))
+    ESX.ShowNotification(locale("error.roadside_avail"))
 end)
 
 RegisterNetEvent('iens:notAllowed', function()
-    ESX.ShowNotification(Lang:t("error.no_permission"))
+    ESX.ShowNotification(locale("error.no_permission"))
 end)
 
 RegisterNetEvent('iens:repair', function()
@@ -373,19 +395,19 @@ RegisterNetEvent('iens:repair', function()
                 healthPetrolTankLast=750.0
                 SetVehicleEngineOn(vehicle, true, false )
                 SetVehicleOilLevel(vehicle,(GetVehicleOilLevel(vehicle)/3)-0.5)
-                ESX.ShowNotification(Lang:t(('fix_message_%s'):format(fixMessagePos)))
+                ESX.ShowNotification(locale(('fix_message_%s'):format(fixMessagePos)))
                 fixMessagePos = fixMessagePos + 1
                 if fixMessagePos > repairCfg.fixMessageCount then fixMessagePos = 1 end
             else
-                ESX.ShowNotification(Lang:t("error.veh_damaged"))
+                ESX.ShowNotification(locale("error.veh_damaged"))
             end
         else
-            ESX.ShowNotification(Lang:t(('nofix_message_%s'):format(noFixMessagePos)))
+            ESX.ShowNotification(locale(('nofix_message_%s'):format(noFixMessagePos)))
             noFixMessagePos = noFixMessagePos + 1
             if noFixMessagePos > repairCfg.noFixMessageCount then noFixMessagePos = 1 end
         end
     else
-        ESX.ShowNotification(Lang:t("error.inside_veh_req"))
+        ESX.ShowNotification(locale("error.inside_veh_req"))
     end
 end)
 
@@ -626,12 +648,12 @@ CreateThread(function()
                 SetVehicleEngineHealth(vehicle, healthEngineNew)
                 local dmgFactr = (healthEngineCurrent - healthEngineNew)
                 if dmgFactr > 0.8 then
-                    DamageRandomComponent()
+                    --DamageRandomComponent()
                 end
             end
             if healthBodyNew ~= healthBodyCurrent then
                 SetVehicleBodyHealth(vehicle, healthBodyNew)
-                DamageRandomComponent()
+                --DamageRandomComponent()
             end
             if healthPetrolTankNew ~= healthPetrolTankCurrent then
                 SetVehiclePetrolTankHealth(vehicle, healthPetrolTankNew)

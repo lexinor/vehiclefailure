@@ -1,38 +1,36 @@
-QBCore.Commands.Add("fix", "Repair your vehicle (Admin Only)", {}, false, function(source)
-    TriggerClientEvent('iens:repaira', source)
-    TriggerClientEvent('vehiclemod:client:fixEverything', source)
-end, "admin")
+ESX.RegisterCommand({'fix'}, {"admin", "superadmin", "dev"}, function(xPlayer, args, showError)
+    TriggerClientEvent('iens:repaira', xPlayer.source)
+    TriggerClientEvent('vehiclemod:client:fixEverything', xPlayer.source)
+end, false, {help = "Repair your vehicle (Admin Only)"})
 
-QBCore.Functions.CreateUseableItem("repairkit", function(source, item)
-    local Player = ESX.GetPlayerFromId(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:RepairVehicle", source)
+ESX.RegisterUsableItem('repairkit', function(playerId)
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+	if xPlayer.hasItem("repairkit") ~= nil then
+        TriggerClientEvent("vehiclefailure:client:RepairVehicle", playerId)
     end
 end)
 
-QBCore.Functions.CreateUseableItem("cleaningkit", function(source, item)
-    local Player = ESX.GetPlayerFromId(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:CleanVehicle", source)
+ESX.RegisterUsableItem('advancedrepairkit', function(playerId)
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+	if xPlayer.hasItem("advancedrepairkit") ~= nil then
+        TriggerClientEvent("vehiclefailure:client:RepairVehicleFull", playerId)
     end
 end)
 
-QBCore.Functions.CreateUseableItem("advancedrepairkit", function(source, item)
-    local Player = ESX.GetPlayerFromId(source)
-	if Player.Functions.GetItemBySlot(item.slot) ~= nil then
-        TriggerClientEvent("qb-vehiclefailure:client:RepairVehicleFull", source)
+ESX.RegisterUsableItem('cleaningkit', function(playerId)
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+	if xPlayer.hasItem("repairkit") ~= nil then
+        TriggerClientEvent("vehiclefailure:client:CleanVehicle", playerId)
     end
 end)
 
-RegisterNetEvent('qb-vehiclefailure:removeItem', function(item)
-    local src = source
-    local ply = ESX.GetPlayerFromId(src)
-    ply.Functions.RemoveItem(item, 1)
+RegisterNetEvent('vehiclefailure:removeItem', function(item)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    xPlayer.removeInventoryItem(item, 1)
 end)
 
-RegisterNetEvent('qb-vehiclefailure:server:removewashingkit', function(veh)
-    local src = source
-    local ply = ESX.GetPlayerFromId(src)
-    ply.Functions.RemoveItem("cleaningkit", 1)
-    TriggerClientEvent('qb-vehiclefailure:client:SyncWash', -1, veh)
+RegisterNetEvent('vehiclefailure:server:removewashingkit', function(veh)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    xPlayer.removeInventoryItem("cleaningkit", 1)
+    TriggerClientEvent('vehiclefailure:client:SyncWash', -1, veh)
 end)
