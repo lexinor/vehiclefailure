@@ -202,6 +202,7 @@ local function IsNearMechanic()
     local pedLocation = GetEntityCoords(ped, 0)
     for _, item in pairs(repairCfg.mechanics) do
         local distance = #(vector3(item.x, item.y, item.z) - pedLocation)
+        print(distance)
         if distance <= item.r then
             return true
         end
@@ -353,7 +354,7 @@ RegisterNetEvent('vehiclefailure:client:RepairVehicleFull', function()
     end
 end)
 
-RegisterNetEvent('iens:repaira', function()
+RegisterNetEvent('vehiclefailure:repaira', function()
     local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) or IsPedInAnyPlane(ped) then
         vehicle = GetVehiclePedIsIn(ped, false)
@@ -371,15 +372,15 @@ RegisterNetEvent('iens:repaira', function()
     ESX.ShowNotification(locale("error.inside_veh_req"))
 end)
 
-RegisterNetEvent('iens:besked', function()
+RegisterNetEvent('vehiclefailure:besked', function()
     ESX.ShowNotification(locale("error.roadside_avail"))
 end)
 
-RegisterNetEvent('iens:notAllowed', function()
+RegisterNetEvent('vehiclefailure:notAllowed', function()
     ESX.ShowNotification(locale("error.no_permission"))
 end)
 
-RegisterNetEvent('iens:repair', function()
+RegisterNetEvent('vehiclefailure:repair', function()
     if isPedDrivingAVehicle() then
         local ped = PlayerPedId()
         vehicle = GetVehiclePedIsIn(ped, false)

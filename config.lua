@@ -39,9 +39,9 @@ BackEngineVehicles = {
 -- Configuration:
 
 -- IMPORTANT: Some of these values MUST be defined as a floating point number. ie. 10.0 instead of 10
-	Config              = {}
-	Config.Paid = true
-	Config.Price = 750
+Config              = {}
+Config.Paid = true
+Config.Price = 750
 
 cfg = {
 	deformationMultiplier = -1,					-- À quel point le véhicule devrait-il se déformer visuellement à la suite d'une collision? Plage de valeurs de 0,0 à 10,0 où 0,0 correspond à aucune déformation et 10,0 correspond à une déformation 10x. -1 = Ne touche pas. Les dégâts visuels ne se synchronisent pas bien avec les autres joueurs.
@@ -71,7 +71,7 @@ cfg = {
 	sundayDriverAcceleratorCurve = 7.5,			-- La courbe de réponse à appliquer à l'accélérateur. Plage 0,0 à 10,0. Des valeurs plus élevées facilitent la conduite lente, ce qui signifie qu'il faut davantage de pression sur l'accélérateur pour accélérer. Ne fait rien pour les pilotes de clavier.
 	sundayDriverBrakeCurve = 5.0,				-- La courbe de réponse à appliquer au frein. Plage 0,0 à 10,0. Des valeurs plus élevées facilitent le freinage, ce qui signifie qu'une plus grande pression sur la manette des gaz est nécessaire pour freiner fort. Ne fait rien pour les pilotes de clavier.
 
-	displayBlips = true,						-- Afficher les blips pour les emplacements des mécaniciens.
+	displayBlips = false,						-- Afficher les blips pour les emplacements des mécaniciens.
 
 	compatibilityMode = false,					-- Empêche d'autres scripts de modifier l'état de fonctionnement du réservoir de carburant pour éviter les pannes de moteur aléatoires avec BVA 2.01 (le système de prévention d'explosion est désactivé).
 
@@ -207,7 +207,7 @@ repairCfg = {
 		{name="Garage", id=446, r=18.0, x=-32.0,   y=-1090.0, z=26.0},	-- Simeons
 		--{name="Garage", id=446, r=25.0, x=-211.0,  y=-1325.0, z=31.0},	-- Bennys
 		{name="Garage", id=446, r=25.0, x=903.0,   y=3563.0,  z=34.0},	-- Auto Repair, Grand Senora Desert
-		{name="Garage", id=446, r=25.0, x=437.0,   y=3568.0,  z=38.0}		-- Auto Shop, Grand Senora Desert
+		{name="Garage", id=446, r=25.0, x=437.0,   y=3568.0,  z=38.0},		-- Auto Shop, Grand Senora Desert
 	},
 
     fixMessageCount = 7,

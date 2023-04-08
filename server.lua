@@ -1,5 +1,5 @@
 ESX.RegisterCommand({'fix'}, {"admin", "superadmin", "dev"}, function(xPlayer, args, showError)
-    TriggerClientEvent('iens:repaira', xPlayer.source)
+    TriggerClientEvent('vehiclefailure:repaira', xPlayer.source)
     TriggerClientEvent('vehiclemod:client:fixEverything', xPlayer.source)
 end, false, {help = "Repair your vehicle (Admin Only)"})
 
